@@ -1,0 +1,406 @@
+{% comment %}
+██╗██╗██╗  ░██████╗████████╗░█████╗░██████╗░  ██╗██╗██╗
+██║██║██║  ██╔════╝╚══██╔══╝██╔══██╗██╔══██╗  ██║██║██║
+██║██║██║  ╚█████╗░░░░██║░░░██║░░██║██████╔╝  ██║██║██║
+╚═╝╚═╝╚═╝  ░╚═══██╗░░░██║░░░██║░░██║██╔═══╝░  ╚═╝╚═╝╚═╝
+██╗██╗██╗  ██████╔╝░░░██║░░░╚█████╔╝██║░░░░░  ██╗██╗██╗
+╚═╝╚═╝╚═╝  ╚═════╝░░░░╚═╝░░░░╚════╝░╚═╝░░░░░  ╚═╝╚═╝╚═╝
+
+This code is intended for use and maintenance by authorized Talemetry CWS Developers only.
+If you are not part of the Talemetry CWS Development team, refrain from making any edits or modifications to the code.
+Unauthorized changes may result in functionality issues or unintended errors.
+
+For any updates, questions, or concerns, please contact your Account Manager for assistance.
+{% endcomment %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %}set is_referral_site variable{% endcomment %}
+{% capture is_referral_site %}false{% endcapture %}
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+        
+        <link rel="shortcut icon" type="image/x-icon" href="/system/production/assets/511473/original/vertex__icon.png">
+        <link rel="stylesheet" href="https://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        {% careersites_required_head_tags %}
+        <script>var $cs = $;</script>
+
+        <!--START SEO META-->
+        <!--Capturing company name into a variable for use within code-->
+        {% capture company_name %}VERTEX Companies{% endcapture %}
+
+        {% capture locale_permalink %}/{{ current_locale.locale }}{% endcapture %}
+
+        <!--Detecting if Job Search Results page-->
+        {% if request.path contains '/search' and request.path contains '/jobs' %}
+            {% capture is_job_search %}true{% endcapture %}
+        {% endif %}
+
+        {% if is_job_search == 'true' %}
+            {% if request_fullpath contains '?' and request_fullpath contains '=' %}
+                {% capture has_query %}true{% endcapture %}
+            {% endif %}
+            <!--Setting meta content for Facet pages-->
+            {% if selected_facets.size == 1 and has_query != 'true' %}
+                {% capture seo_to_index %}true{% endcapture %}
+                {% capture meta_title %}{{ selected_facets[0]["label"] | html_escape }} Career{% if jobs.total_entries > 1 %}s{% endif %}{% endcapture %}
+                {% capture meta_description %}{% if jobs.total_entries > 0 %}Search {{ jobs.total_entries }} {% endif %}{{ selected_facets[0]["label"] | html_escape }} Career{% if jobs.total_entries > 1 %}s{% endif %} available at {{ company_name }}.{% endcapture %}
+                {% capture meta_keywords %}{% meta_keywords %}{% endcapture %}
+            <!--Setting meta content for Saved Jobs page-->
+            {% elsif params['saved_jobs'] == '1' %}
+                {% capture seo_to_index %}false{% endcapture %}
+                {% capture meta_title %}Saved Jobs{% endcapture %}
+                {% capture meta_description %}{% endcapture %}
+                {% capture meta_keywords %}{% endcapture %}
+            <!--Setting meta content for Job Search Results pages-->
+            {% else %}
+                {% if has_query == 'true' %}
+                    {% capture seo_to_index %}false{% endcapture %}
+                {% elsif selected_facets.size > 1 %}
+                    {% capture seo_to_index %}false{% endcapture %}
+                {% else %}
+                    {% capture seo_to_index %}true{% endcapture %}
+                {% endif %}
+                {% capture meta_title %}VERTEX Careers | Join a Global Leader in Forensic, Compliance &amp; Regulatory, Project Advisory{% endcapture %}
+                {% capture meta_description %}Build your career at VERTEX. Join a global leader in forensic, compliance & regulatory, and project advisory services. Apply today.{% endcapture %}
+                {% capture meta_keywords %}{% meta_keywords %}{% endcapture %}
+            {% endif %}
+
+        {% elsif job %}
+            <!--Setting meta content for Job Details pages-->
+            {% capture job_location %}
+            {% if job.location.city != blank %}
+                {{ job.location.city }}{% if job.location.state_prov_short != blank or job.location.country != blank %},{% endif %}
+            {% endif %}
+            {% if job.location.state_prov_short != blank %}
+                {% capture job_location_state_prov_short_no_digit %}{{ job.location.state_prov_short | replace_global_regex: "[\d]", ":::" }}{% endcapture %}
+                {% if job_location_state_prov_short_no_digit contains ':::' %}
+                    {{ job.location.state_prov }}{% if job.location.country != blank %},{% endif %}
+                {% else %}
+                    {{ job.location.state_prov_short }}{% if job.location.country != blank %},{% endif %}
+                {% endif %}
+            {% endif %}
+            {% if job.location.country != blank %}{{ job.location.country }}{% endif %}
+            {% endcapture %}
+            {% capture seo_to_index %}{{ job.active? }}{% endcapture %}
+            {% capture meta_title %}{{ job.title }} in {{ job_location | replace_global_regex: '\r?\n|\r','' | replace_global_regex: "\s+", " " }}{% endcapture %}
+            {% capture meta_description %}{{ job.title }} in {{ job_location | replace_global_regex: '\r?\n|\r','' | replace_global_regex: "\s+", " " }}{% endcapture %}
+            {% capture meta_keywords %}{% meta_keywords %}{% endcapture %}
+
+        {% elsif page %}
+            <!--Setting meta content for content pages-->
+            {% if page.tag_list contains 'no-index' %}
+                {% capture seo_to_index %}false{% endcapture %}
+            {% else %}
+                {% capture seo_to_index %}true{% endcapture %}
+            {% endif %}
+            {% capture meta_title %}{{ page.title | html_safe }}{% endcapture %}
+            {% capture meta_description %}{% meta_description %}{% endcapture %}
+            {% capture meta_keywords %}{% meta_keywords %}{% endcapture %}
+
+        {% else %}
+            {% capture seo_to_index %}true{% endcapture %}
+            {% capture meta_title %}{% careersites_required_title %}{% endcapture %}
+            {% capture meta_description %}{% meta_description %}{% endcapture %}
+            {% capture meta_keywords %}{% meta_keywords %}{% endcapture %}
+
+        {% endif %}
+
+        {% if root_url contains 'internal' %}
+            <!--Setting meta content for non-indexable sites-->
+            {% capture seo_to_index %}false{% endcapture %}
+            {% capture meta_description %}{% endcapture %}
+            {% capture meta_keywords %}{% endcapture %}
+        {% endif %}
+
+        <title>{{ meta_title }}</title>
+
+        {% if seo_to_index == 'true' %}
+            {% if root_url contains 'preview' or root_url contains '-dev' %}
+                <meta name="robots" content="noindex, nofollow">
+            {% else %}
+                {% if job %}
+                    <meta name="robots" content="index, nofollow">
+                {% else %}
+                    <meta name="robots" content="index, follow">
+                {% endif %}
+            {% endif %}
+        {% else %}
+            <meta name="robots" content="noindex, nofollow">
+        {% endif %}
+
+        {% capture current_url_with_current_locale_permalink %}{{ request_host_with_port }}{{ locale_permalink }}{% endcapture %}
+        {% capture current_url %}https://{{ request_host_with_port }}{{ request_path }}{% endcapture %}
+
+        {% if available_locales.total_entries > 0 %}
+            {% capture canonical_url %}{{ current_url | replace: current_url_with_current_locale_permalink,request_host_with_port }}{% endcapture %}
+        {% else %}
+            {% capture canonical_url %}{{ current_url }}{% endcapture %}
+        {% endif %}
+        <link rel="canonical" href="{{ canonical_url }}" />
+
+        {% for locale in available_locales %}
+            {% capture current_url_with_locale_permalink %}{{ request_host_with_port }}/{{ locale.locale }}{% endcapture %}
+            {% capture locale_canonical_url %}{{ canonical_url | replace: request_host_with_port,current_url_with_locale_permalink }}{% endcapture %}
+            <link href="{{ locale_canonical_url }}" hreflang="{{ locale.locale }}" rel="alternate" type="text/html"/>
+        {% endfor %}
+
+        {% if meta_description != blank %}
+            <meta name="description" content="{{ meta_description }}">
+        {% endif %}
+        {% comment %}
+        {% if meta_keywords != blank %}
+            <meta name="keywords" content="{{ meta_keywords }}">
+        {% endif %}
+        Removed because meta keywords are outdated, irrelevant and has no impact on search engine rankings; and could even hurt SEO
+        {% endcomment %}
+        <!--END SEO META-->
+
+        <meta property="og:title" content="{{ meta_title }}" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="{{ root_url }}system/production/assets/511474/original/vertex__social-share.jpg" />
+        <meta property="og:url" content="{{ root_url }}{{ request_fullpath | remove_first: '/' }}" />
+        {% if meta_description != blank %}<meta property="og:description" content="{{ meta_description }}" />{% endif %}
+        <meta property="og:locale" content="{% if current_locale.locale != blank %}{{ current_locale.locale }}{% else %}en{% endif %}" />
+        <meta property="og:site_name" content="{{ career_site.name }}" />
+
+        {% comment %}Logic for Prod only code{% endcomment %}
+        {% if root_url contains 'preview' or root_url contains '-dev' %}
+            {% capture is_dev %}true{% endcapture %}
+        {% endif %}
+        {% if is_dev != 'true' %}
+            {% comment %}Prod only code here{% endcomment %}
+        {% endif %}
+    </head>
+    <body id="{{ template.permalink }}" class="scroll{% if request_fullpath contains '/search' %} has-search{% endif %}">
+        <!-- <div class="preloader-wrapper">
+            <div class="preloader"></div>
+        </div> -->
+
+        <div class="width-detector"></div>
+
+        <div class="saved-jobs-alert-wrapper full-height full-width hide-for-print" role="alert">
+            <div class="saved-jobs-alert">
+                <div class="saved-jobs-alert__check padded-medium">
+                    <i class="fa fa-circle-check" aria-hidden="true"></i>
+                </div>
+                <div class="saved-jobs-alert__message padded-medium"></div>
+            </div><!--close .saved-jobs-alert-->
+        </div><!--close .saved-jobs-alert-wrapper-->
+
+        <div class="page-container fadeIn{% if job and params['savejob'] == '1' %} hide{% endif %}">
+
+            <div class="hide">
+                {% capture returnurl %}return_url\":\"http:\\\\\\\\\\\\\\\\{{career_site.domain}}/\"{% endcapture %}
+                {% capture tn %}
+                  {{ "Join our Talent Network" | link_to_talent_network: "talent-network-main", "talent-network-main" }}
+                {% endcapture %}
+                {{ tn | replace: 'return_url\":null', returnurl }}
+            </div>
+
+            <a class="skip-main background-1 background-dark hide-for-print" href="#main" rel="nofollow">Skip to main content</a>
+            
+            <div class="page-banner{% if is_job_search == 'true' and params['saved_jobs'] != '1' %} page-banner--job-search background-dark{% endif %}">
+                <div class="page-banner__copy">
+                    <div class="top-wrapper">
+                        <div class="header-anchor js"></div>
+                        <div class="header-outer">
+                            <header>
+                                <div class="header-inner row row--full-width">
+                                    <div class="columns header__logo">
+                                        <a href="{{ root_url }}">
+                                            <img src="/system/production/assets/511476/original/vertex__logo--white.png{% asset_seed %}" alt="{{ company_name }}" class="logo-on-dark-bg" />
+                                            <img src="/system/production/assets/511475/original/vertex__logo--blue.png{% asset_seed %}" alt="{{ company_name }}" class="logo-on-light-bg" />
+                                        </a>
+                                    </div>
+                                    <div class="hide-for-print columns header__menu-mobile text-right hide-for-large">
+                                        <span class="header__menu-mobile-button">
+                                            <a href="javascript:void(0);" aria-expanded="false" rel="nofollow">
+                                                <i class="fa fa-bars open" aria-hidden="true"><span class="show-for-sr">Open Menu</span></i>
+                                                <i class="fa-solid fa-x close" aria-hidden="true"><span class="show-for-sr">Close Menu</span></i>
+                                            </a>
+                                        </span>
+                                    </div>
+                                    <div class="hide-for-print columns header__menu" aria-hidden="true">
+                                        <nav>
+                                            <ul class="clearfix">
+                                                <li><a href="/search/jobs">Search Jobs</a></li>
+                                                <li><a href="/pages/saved-jobs" class="saved_jobs_link" rel="nofollow">Saved Jobs</a></li>
+                                                <li><a href="https://vertexeng.com/about/mission-values-and-culture/" target="_blank">About Us</a></li>
+                                                <li><a href="javascript:void(0);" class="talent-network-link">Join Our Talent Network</a></li>
+                                                <li><a href="{{ 'en' | candidate_portal_url }}" target="_blank" rel="nofollow">Candidate Portal</a></li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </header><!--close header-->
+                        </div><!--close .header-outer-->
+                    </div><!--close .top-wrapper-->
+
+                    <div id="main" tabindex="-1"></div>
+                    {% if request_fullpath contains '/search' and params['saved_jobs'] != '1' %}
+                    {% comment %}2025-10-02 as requested by FionaH - to decrease this section by 50%{% endcomment %}
+                    <div class="hide-for-print padded-v-xlarge branded-search">
+                        <div class="space-medium"></div>
+                        <div class="cs_item_type_jobsearch cs_cfix cs_jsearchform">
+                            <form id="search_form---" method="get" action="/search/jobs" class="search-form">
+                                <div class="row">
+                                    <div class="columns xlarge-5 space-medium">
+                                        <label for="cs_jobsearchforminput_keyword" class="show-for-sr">Keyword, Job Title, Skills</label>
+                                        <input type="text" placeholder="Keyword, Job Title, Skills" id="cs_jobsearchforminput_keyword" class="ui-autocomplete-input" autocomplete="off" name="q" value="{{ params['q'] | escape_html }}"><span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+                                    </div>
+                                    <div class="columns medium-8 xlarge-5 space-medium">
+                                        <label for="search__location" class="show-for-sr">Enter a Location</label>
+                                        <input type="text" name="location" value="{{ params['location'] | escape_html }}" placeholder="Enter a Location" id="search__location" />
+                                    </div>
+                                    <div class="columns medium-4 xlarge-2 space-medium">
+                                        <input type="submit" value="Find Jobs" class="branded-button-2 full-width">
+                                    </div>
+                                </div>
+                            </form>
+                        </div><!--close .cs_item_type_jobsearch.cs_cfix cs_jsearchform-->
+                    </div><!--close .branded-search-->
+                    {% endif %}
+                </div><!--close .page-banner__copy-->
+            </div><!--close .page-banner-->
+
+            <div class="template-content{% if params['savejob'] == '1' %} hide{% endif %}" role="main">
+                {{ template_content }}
+            </div><!--close .template-content-->
+
+            <footer>
+                {% if request_fullpath contains '/search' or job %}
+                    <div class="padded-v-xlarge talent-network-section background-dark">
+                        <div class="talent-network-section__copy">
+                            <div class="padded-v-large show-for-xlarge"></div>
+                            <div class="row">
+                                <div class="column medium-10 medium-offset-1 large-8 large-offset-2 end text-center">
+                                    {% if request_fullpath contains '/search' %}
+                                        <p class="heading-3 space-large">Join VERTEX’s Talent Network — stay connected and explore opportunities for growth and internal mobility</p>
+                                        <button class="branded-button-2 talent-network-link">Connect With Us</button>
+                                    {% elsif job %}
+                                        <p class="heading-4 space-large">Interested in working for The VERTEX Companies? Take the first step by joining our Talent Network today!</p>
+                                        <button class="branded-button-2 talent-network-link">Join VERTEX’s Talent Network</button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="padded-v-large show-for-xlarge"></div>
+                        </div><!--close .talent-network-section__copy-->
+                    </div><!--close .talent-network-section-->
+                {% endif %}
+                <div class="footer-inner padded-v-large background-1 background-dark">
+                    <div class="row row--full-width space-large">
+                        <div class="column">
+                            <img src="/system/production/assets/511494/original/vertex__logo-icon.png" alt="{{ company_name }}" style="max-height: 65px;" />
+                        </div>
+                    </div>
+                    <div class="row row--full-width space-large">
+                        <div class="columns large-8 xlarge-6 xlarge-offset-3">
+                            <div class="row">
+                                <div class="columns small-6">
+                                    <p class="space-small"><strong>CAREERS</strong></p>
+                                    <nav>
+                                        <ul class="clearfix">
+                                            <li><a href="/search/jobs">Search Jobs</a></li>
+                                            <li><a href="/pages/saved-jobs" class="saved_jobs_link" rel="nofollow">Saved Jobs</a></li>
+                                            <li><a href="https://vertexeng.com/about/mission-values-and-culture/" target="_blank">About Us</a></li>
+                                            <li><a href="javascript:void(0);" class="talent-network-link">Join Our Talent Network</a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                                <div class="columns small-6">
+                                    <address>
+                                        <p>The Vertex Companies, LLC<br />
+                                        2 Grand Central<br />
+                                        140 East 45th Street, 15th Fl<br />
+                                        New York, NY  10017<br />
+                                        USA</p>
+                                    </address>
+                                    <p>
+                                        <i class="fa fa-phone"></i> &nbsp;<a href="tel:+17819526000">+1.781.952.6000</a><br />
+                                        <i class="fa fa-envelope"></i> &nbsp;<a href="mailto:TalentAcquisition@vertexeng.com">TalentAcquisition@vertexeng.com</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="columns large-4 xlarge-3">
+                            <div class="footer__social-media">
+                                <p class="space-small"><strong>CONNECT</strong></p>
+                                <a href="https://www.facebook.com/Vertexeng" target="_blank"><i class="fa-brands fa-facebook-f"><span class="show-for-sr">facebook</span></i></a>
+                                <a href="https://x.com/vertex411" target="_blank"><i class="fa-brands fa-x-twitter"><span class="show-for-sr">x</span></i></a>
+                                <a href="https://www.linkedin.com/company/vertexcompanies" target="_blank"><i class="fa-brands fa-linkedin"><span class="show-for-sr">linkedin</span></i></a>
+                                <a href="https://www.instagram.com/Vertexco/" target="_blank"><i class="fa-brands fa-instagram"><span class="show-for-sr">instagram</span></i></a>
+                                <a href="https://www.youtube.com/@vertexeng" target="_blank"><i class="fa-brands fa-youtube"><span class="show-for-sr">youtube</span></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer-copyright">
+                        <div class="row row--full-width">
+                            <div class="columns small-4">
+                                <ul>
+                                    <li><a href="https://vertexeng.com/privacy-policy/">Privacy Policy</a></li>
+                                    <li><a href="https://vertexeng.com/privacy-policy/#cookiepolicy">Cookie Policy</a></li>
+                                </ul>
+                            </div>
+                            <div class="columns small-8 large-text-right">
+                                &copy; Copyright 2019-{{ 'now' | date: "%Y" }} The Vertex Companies, LLC. All Rights Reserved.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer><!--close footer-->
+
+        </div><!--close .page-container-->
+
+        <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/js/foundation.min.js" integrity="sha256-pRF3zifJRA9jXGv++b06qwtSqX1byFQOLjqa2PTEb2o=" crossorigin="anonymous"></script>
+        <script>$(document).foundation();</script>
+        
+        {% careersites_required_footer %}
+    </body>
+</html>
