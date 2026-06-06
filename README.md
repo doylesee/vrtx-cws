@@ -1,5 +1,3 @@
-<p><a href="https://careers.vertexeng.com/"><img src="https://doylesee.github.io/vrtx-cws/thumbnail.jpg" /></a></p>
-
 ## Project Overview
 <pre>
 <b>Project:</b>   Vertex Careers
@@ -8,6 +6,7 @@
 </pre>
 &nbsp;<strong><a href="https://careers.vertexeng.com/">View project</a></strong>
 
+<p><a href="https://careers.vertexeng.com/"><img src="https://doylesee.github.io/vrtx-cws/thumbnail.jpg" /></a></p>
 <br />
 
 ## The Challenge
