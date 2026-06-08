@@ -4,9 +4,9 @@
 <b>Role:</b>      UI/UX Designer & UI Developer
 <b>Tools:</b>     Figma, Liquid, HTML5, CSS3, JS/jQuery, Foundation
 </pre>
-&nbsp;<strong><a href="https://careers.vertexeng.com/">View project</a></strong>
+&nbsp;<strong><a href="https://careers.vertexeng.com/" rel="noopener noreferrer">View project</a></strong>
 
-<p><a href="https://careers.vertexeng.com/"><img src="https://doylesee.github.io/vrtx-cws/thumbnail.jpg" /></a></p>
+<p><a href="https://careers.vertexeng.com/" rel="noopener noreferrer"><img src="https://doylesee.github.io/vrtx-cws/thumbnail.jpg" /></a></p>
 <br />
 
 ## The Challenge
@@ -26,4 +26,4 @@ Using Figma, I built out a simple design concept. The project was initially goin
 ## Results & Impact
 This was a fun project to work on because of the initial limitations. While it is a simple two-page site on paper, I am showcasing it on my portfolio because it perfectly demonstrates my ability to turn bare-bones technical requirements into something that is aesthetically beautiful, engaging, and professional. The final product provided Vertex with a highly functional, brand-accurate recruitment tool that offers candidates a beautiful and intuitive user experience from their very first click.
 
-<br /><strong><a href="https://careers.vertexeng.com/">View project</a></strong>
+<br /><strong><a href="https://careers.vertexeng.com/" rel="noopener noreferrer">View project</a></strong>
