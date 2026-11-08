@@ -12,6 +12,10 @@
 * [View Project](https://careers.vertexeng.com/)
 <br />
 
+<a href="https://careers.vertexeng.com">
+  <img src="screenshot.jpg" alt="" width="100%">
+</a>
+
 ## The Challenge
 The objective was to deploy a straightforward, two-page career site consisting of a Job Search page and a Job Detail page. Because of the simple requirement, the client did not have any custom design mockups available and initially planned to leverage a completely bare-bones, out-of-the-box template.
 
